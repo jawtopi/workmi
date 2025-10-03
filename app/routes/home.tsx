@@ -300,7 +300,9 @@ export default function Home() {
                 <div className="mt-8 flex items-center gap-4">
                   <a
                     className="magnetic-btn group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-                    href="#waitlist"
+                    href="https://tally.so/r/n0N6zB"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     Join waitlist
                     <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
@@ -554,24 +556,17 @@ export default function Home() {
             <p className="mt-4 text-lg text-slate-600">
               Join the teams saving 10+ hours a week with their AI clone. We launch limited cohorts every month.
             </p>
-            <form className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <input
-                type="email"
-                required
-                placeholder="you@company.com"
-                className="w-full rounded-full border border-slate-200/70 bg-white px-5 py-3 text-base text-slate-700 shadow-sm outline-none transition focus:border-[#3A3EBE] focus:ring-2 focus:ring-[#3A3EBE]/30"
-              />
-              <button
-                type="submit"
-                className="magnetic-btn group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-7 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:w-auto"
+            <div className="mt-10">
+              <a
+                href="https://tally.so/r/n0N6zB"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="magnetic-btn group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-7 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
               >
                 Join waitlist
                 <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
-              </button>
-            </form>
-            <p className="mt-4 text-sm text-slate-500">
-              <span className="font-medium text-slate-600">3,284</span> operators already in line.
-            </p>
+              </a>
+            </div>
           </div>
           </div>
         </section>
