@@ -107,6 +107,7 @@ const workflowSteps: WorkflowStep[] = [
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [typingMessage, setTypingMessage] = useState("");
+  const [completedTasks, setCompletedTasks] = useState(0);
   const fullMessage = "Absolutely! Per our call on Friday, we're finalizing the pricing structure...";
 
   useEffect(() => {
@@ -138,18 +139,72 @@ export default function Home() {
 
   useEffect(() => {
     let currentIndex = 0;
+    let typingInterval: NodeJS.Timeout;
+    let resetTimeout: NodeJS.Timeout;
+    let startDelay: NodeJS.Timeout;
+
+    const startTyping = () => {
+      currentIndex = 0;
+      setTypingMessage("");
+
+      startDelay = setTimeout(() => {
+        typingInterval = setInterval(() => {
+          if (currentIndex < fullMessage.length) {
+            currentIndex++;
+            setTypingMessage(fullMessage.slice(0, currentIndex));
+          } else {
+            clearInterval(typingInterval);
+            resetTimeout = setTimeout(() => {
+              startTyping(); // Restart the animation
+            }, 2000);
+          }
+        }, 50);
+      }, 500);
+    };
+
+    startTyping();
+
+    return () => {
+      clearTimeout(startDelay);
+      clearTimeout(resetTimeout);
+      if (typingInterval) clearInterval(typingInterval);
+    };
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (currentIndex < fullMessage.length) {
-        setTypingMessage(fullMessage.slice(0, currentIndex + 1));
-        currentIndex++;
-      } else {
-        setTimeout(() => {
-          currentIndex = 0;
-          setTypingMessage("");
-        }, 2000);
-      }
-    }, 50);
+      setCompletedTasks((prev) => {
+        if (prev >= 3) {
+          return 0; // Reset to start
+        }
+        return prev + 1;
+      });
+    }, 1500);
+
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a[href^="#"]');
+      if (anchor) {
+        const href = anchor.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          const targetId = href.substring(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            const navbarHeight = 100; // Account for sticky navbar + spacing
+            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarHeight;
+            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
   return (
@@ -314,20 +369,26 @@ export default function Home() {
                   <div className="relative">
                     <div className="mb-3 flex items-center justify-between">
                       <h3 className="font-display text-sm font-semibold text-slate-900">Calendar</h3>
-                      <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">Syncing</span>
+                      <span className="relative flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                        </span>
+                        Syncing
+                      </span>
                     </div>
                     <p className="mt-2 text-xs leading-relaxed text-slate-600">
                       Finding mutual availability with Maria
                     </p>
                     <div className="mt-3 space-y-2">
-                      <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE]/5 to-[#98CEFB]/5 px-3 py-2">
+                      <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE]/5 to-[#98CEFB]/5 px-3 py-2 transition-all duration-500">
                         <span className="text-xs font-medium text-slate-900">Tue 2:00 PM</span>
-                        <span className="ml-auto text-[10px] text-emerald-600">✓ Both free</span>
+                        <span className="ml-auto text-[10px] text-emerald-600 animate-pulse">✓ Both free</span>
                       </div>
-                      <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 opacity-50">
+                      <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 opacity-50 animate-pulse" style={{ animationDelay: '0.3s' }}>
                         <span className="text-xs text-slate-700">Wed 10:00 AM</span>
                       </div>
-                      <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 opacity-50">
+                      <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 opacity-50 animate-pulse" style={{ animationDelay: '0.6s' }}>
                         <span className="text-xs text-slate-700">Thu 3:30 PM</span>
                       </div>
                     </div>
@@ -342,23 +403,31 @@ export default function Home() {
                   <div className="relative">
                     <div className="mb-3 flex items-center justify-between">
                       <h3 className="font-display text-sm font-semibold text-slate-900">Tasks</h3>
-                      <span className="rounded-full bg-gradient-to-r from-[#9B2389]/10 to-[#DC765C]/10 px-2.5 py-1 text-[10px] font-semibold text-slate-700">Completed</span>
+                      <span className="rounded-full bg-gradient-to-r from-[#9B2389]/10 to-[#DC765C]/10 px-2.5 py-1 text-[10px] font-semibold text-slate-700">
+                        {completedTasks === 3 ? "Completed" : "Running"}
+                      </span>
                     </div>
                     <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                      5 actions completed automatically
+                      {completedTasks}/3 actions completed
                     </p>
                     <div className="mt-3 space-y-2">
-                      <div className="flex items-center gap-2 rounded-lg bg-emerald-50/50 px-3 py-2 text-left">
-                        <span className="text-xs text-emerald-700">✓</span>
-                        <p className="text-xs text-slate-900">Updated CRM records</p>
+                      <div className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left transition-all duration-500 ${completedTasks >= 1 ? 'bg-emerald-50/50' : 'bg-slate-50 opacity-60'}`}>
+                        <span className={`text-xs transition-all duration-500 ${completedTasks >= 1 ? 'text-emerald-700' : 'text-slate-500'}`}>
+                          {completedTasks >= 1 ? '✓' : '○'}
+                        </span>
+                        <p className={`text-xs transition-all duration-500 ${completedTasks >= 1 ? 'text-slate-900' : 'text-slate-600'}`}>Updated CRM records</p>
                       </div>
-                      <div className="flex items-center gap-2 rounded-lg bg-emerald-50/50 px-3 py-2 text-left">
-                        <span className="text-xs text-emerald-700">✓</span>
-                        <p className="text-xs text-slate-900">Sent 3 follow-ups</p>
+                      <div className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left transition-all duration-500 ${completedTasks >= 2 ? 'bg-emerald-50/50' : 'bg-slate-50 opacity-60'}`}>
+                        <span className={`text-xs transition-all duration-500 ${completedTasks >= 2 ? 'text-emerald-700' : 'text-slate-500'}`}>
+                          {completedTasks >= 2 ? '✓' : '○'}
+                        </span>
+                        <p className={`text-xs transition-all duration-500 ${completedTasks >= 2 ? 'text-slate-900' : 'text-slate-600'}`}>Sent 3 follow-ups</p>
                       </div>
-                      <div className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-left opacity-60">
-                        <span className="text-xs text-slate-500">○</span>
-                        <p className="text-xs text-slate-600">Invoice check (9 AM)</p>
+                      <div className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left transition-all duration-500 ${completedTasks >= 3 ? 'bg-emerald-50/50' : 'bg-slate-50 opacity-60'}`}>
+                        <span className={`text-xs transition-all duration-500 ${completedTasks >= 3 ? 'text-emerald-700' : 'text-slate-500'}`}>
+                          {completedTasks >= 3 ? '✓' : '○'}
+                        </span>
+                        <p className={`text-xs transition-all duration-500 ${completedTasks >= 3 ? 'text-slate-900' : 'text-slate-600'}`}>Invoice check (9 AM)</p>
                       </div>
                     </div>
                   </div>
