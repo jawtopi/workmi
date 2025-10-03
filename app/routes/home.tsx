@@ -19,7 +19,7 @@ type WorkflowStep = {
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Your workmi" },
+    { title: "workmi: your ai work clone" },
     {
       name: "description",
       content:
