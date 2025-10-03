@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Route } from "./+types/home";
 
 type WorkflowStep = {
@@ -77,7 +77,7 @@ const workflowSteps: WorkflowStep[] = [
     step: "04",
     title: "Workmi handles the thread",
     description:
-      "It manages the back-and-forth until the invoice is closed.",
+      "It manages the back-and-forth until the invoice is closed. Loops you back in only if something needs your decision.",
     bullets: [
       "Loops you back in only if something needs your decision.",
     ],
@@ -105,6 +105,10 @@ const workflowSteps: WorkflowStep[] = [
 ];
 
 export default function Home() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [typingMessage, setTypingMessage] = useState("");
+  const fullMessage = "Absolutely! Per our call on Friday, we're finalizing the pricing structure...";
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -124,11 +128,61 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex < fullMessage.length) {
+        setTypingMessage(fullMessage.slice(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        setTimeout(() => {
+          currentIndex = 0;
+          setTypingMessage("");
+        }, 2000);
+      }
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-100/50 via-white to-pink-100/50 text-slate-900">
+      {/* Animated Gradient Mesh Background */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-60">
+        <div className="animate-mesh-shift absolute left-[10%] top-[10%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-purple-400/40 via-pink-400/40 to-orange-400/40 blur-[100px]" />
+        <div className="animate-mesh-shift absolute right-[5%] top-[30%] h-[500px] w-[500px] rounded-full bg-gradient-to-br from-blue-400/40 via-purple-400/40 to-pink-400/40 blur-[100px]" style={{ animationDelay: '-10s' }} />
+        <div className="animate-mesh-shift absolute bottom-[10%] left-[30%] h-[550px] w-[550px] rounded-full bg-gradient-to-br from-pink-400/40 via-orange-400/40 to-yellow-400/40 blur-[100px]" style={{ animationDelay: '-20s' }} />
+      </div>
+
+      {/* Interactive Mouse Gradient */}
+      <div
+        className="pointer-events-none fixed z-0 h-96 w-96 rounded-full bg-gradient-to-r from-purple-300/20 to-pink-300/20 blur-3xl transition-all duration-300 ease-out"
+        style={{
+          left: `${mousePosition.x - 192}px`,
+          top: `${mousePosition.y - 192}px`,
+        }}
+      />
+
+      {/* Subtle Grid Overlay */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]"
+        style={{
+          backgroundImage: 'linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)',
+          backgroundSize: '80px 80px'
+        }}
+      />
+
+      <div className="relative z-10">
       <header className="sticky top-4 z-50">
         <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
+          <div className="glass overflow-hidden rounded-3xl border border-white/60 shadow-2xl">
             <div className="flex items-center justify-between px-6 py-3 sm:px-8">
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3A3EBE] via-[#F044A0] to-[#DC765C] text-white">
@@ -145,11 +199,11 @@ export default function Home() {
               </a>
             </nav>
             <a
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:shadow-md"
+              className="magnetic-btn group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
               href="#waitlist"
             >
               Join waitlist
-              <span aria-hidden className="text-base">→</span>
+              <span aria-hidden className="text-base transition-transform group-hover:translate-x-1">→</span>
             </a>
           </div>
         </div>
@@ -159,7 +213,7 @@ export default function Home() {
       <main className="pb-24">
         {/* Hero Section */}
         <section id="hero" className="mx-auto mt-8 max-w-7xl px-6 sm:px-8">
-          <div className="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white p-8 shadow-xl sm:p-12">
+          <div className="glass relative overflow-hidden rounded-3xl border border-white/60 p-8 shadow-2xl sm:p-12">
             {/* Subtle background gradient */}
             <div className="pointer-events-none absolute inset-0">
               <div
@@ -190,11 +244,11 @@ export default function Home() {
 
                 <div className="mt-8 flex items-center gap-4">
                   <a
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:shadow-md"
+                    className="magnetic-btn group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
                     href="#waitlist"
                   >
                     Join waitlist
-                    <span aria-hidden>→</span>
+                    <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
                   </a>
                   <a
                     className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-base font-semibold text-slate-700 transition hover:bg-slate-50"
@@ -211,36 +265,42 @@ export default function Home() {
 
                 {/* Card 1: Text Communication - Large Left Card */}
                 <div
-                  className="absolute left-0 top-1/2 w-[320px] -translate-y-1/2 rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:shadow-xl"
-                  style={{ zIndex: 1 }}
+                  className="glass hover-lift animate-card-entrance absolute left-0 top-1/2 w-[320px] -translate-y-1/2 rounded-2xl border border-white/60 p-6 shadow-xl"
+                  style={{ zIndex: 1, animationDelay: '0.1s' }}
                 >
                   <div className="relative">
                     <div className="mb-4 flex items-center justify-between">
                       <h3 className="font-display text-sm font-semibold text-slate-900">AI Communication</h3>
-                      <span className="rounded-full bg-gradient-to-r from-[#3A3EBE]/10 to-[#F044A0]/10 px-2.5 py-1 text-[10px] font-semibold text-slate-700">Live</span>
+                      <span className="rounded-full bg-gradient-to-r from-[#3A3EBE]/10 to-[#F044A0]/10 px-2.5 py-1 text-[10px] font-semibold text-slate-700">
+                        <span className="relative flex h-2 w-2 items-center justify-center">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3A3EBE] opacity-75"></span>
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#3A3EBE]"></span>
+                        </span>
+                      </span>
                     </div>
                     <div className="space-y-3">
-                      <div className="flex gap-2">
-                        <div className="rounded-2xl rounded-tl-sm bg-slate-50 px-4 py-2.5 text-left">
+                      <div className="animate-slide-in-left flex gap-2" style={{ animationDelay: '0.3s' }}>
+                        <div className="rounded-2xl rounded-tl-sm bg-slate-100 px-4 py-2.5 text-left shadow-sm">
                           <p className="text-sm leading-relaxed text-slate-700">
                             Can we get an update on the proposal?
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-2">
-                        <div className="flex-1 rounded-2xl rounded-br-sm bg-gradient-to-br from-[#3A3EBE]/5 to-[#F044A0]/5 px-4 py-2.5">
+                      <div className="animate-slide-in-right flex items-start gap-2" style={{ animationDelay: '0.6s' }}>
+                        <div className="flex-1 rounded-2xl rounded-br-sm bg-gradient-to-br from-[#3A3EBE]/10 to-[#F044A0]/10 px-4 py-2.5 shadow-sm">
                           <p className="text-sm leading-relaxed text-slate-700">
-                            Absolutely! Per our call on Friday, we're finalizing the pricing structure...
+                            {typingMessage}
+                            <span className="ml-1 inline-block h-4 w-0.5 animate-pulse bg-slate-700"></span>
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <div className="flex gap-0.5">
-                          <span className="inline-block size-1.5 animate-pulse rounded-full bg-gradient-to-r from-[#3A3EBE] to-[#F044A0]" style={{ animationDelay: "0ms" }} />
-                          <span className="inline-block size-1.5 animate-pulse rounded-full bg-gradient-to-r from-[#3A3EBE] to-[#F044A0]" style={{ animationDelay: "150ms" }} />
-                          <span className="inline-block size-1.5 animate-pulse rounded-full bg-gradient-to-r from-[#3A3EBE] to-[#F044A0]" style={{ animationDelay: "300ms" }} />
+                        <div className="flex gap-1">
+                          <span className="animate-typing-dots inline-block size-1.5 rounded-full bg-gradient-to-r from-[#3A3EBE] to-[#F044A0]" />
+                          <span className="animate-typing-dots inline-block size-1.5 rounded-full bg-gradient-to-r from-[#3A3EBE] to-[#F044A0]" style={{ animationDelay: "0.2s" }} />
+                          <span className="animate-typing-dots inline-block size-1.5 rounded-full bg-gradient-to-r from-[#3A3EBE] to-[#F044A0]" style={{ animationDelay: "0.4s" }} />
                         </div>
-                        <span>Drafting...</span>
+                        <span>AI responding...</span>
                       </div>
                     </div>
                   </div>
@@ -248,8 +308,8 @@ export default function Home() {
 
                 {/* Card 2: Calendar Orchestration - Top Right */}
                 <div
-                  className="absolute left-[200px] top-6 w-[280px] rounded-2xl border border-slate-200 bg-white p-5 shadow-lg transition-transform hover:shadow-xl"
-                  style={{ zIndex: 2 }}
+                  className="glass hover-lift animate-card-entrance absolute left-[200px] top-6 w-[280px] rounded-2xl border border-white/60 p-5 shadow-xl"
+                  style={{ zIndex: 2, animationDelay: '0.3s' }}
                 >
                   <div className="relative">
                     <div className="mb-3 flex items-center justify-between">
@@ -276,8 +336,8 @@ export default function Home() {
 
                 {/* Card 3: Proactive Actions - Bottom Right */}
                 <div
-                  className="absolute bottom-6 left-[220px] w-[290px] rounded-2xl border border-slate-200 bg-white p-5 shadow-lg transition-transform hover:shadow-xl"
-                  style={{ zIndex: 2 }}
+                  className="glass hover-lift animate-card-entrance absolute bottom-6 left-[220px] w-[290px] rounded-2xl border border-white/60 p-5 shadow-xl"
+                  style={{ zIndex: 2, animationDelay: '0.5s' }}
                 >
                   <div className="relative">
                     <div className="mb-3 flex items-center justify-between">
@@ -312,144 +372,76 @@ export default function Home() {
 
         <section id="how-it-works" className="mx-auto mt-28 max-w-7xl px-6 sm:px-8">
           <div className="scroll-animate text-center">
-            <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
-              See how Workmi runs a play
+            <h2 className="font-display text-4xl tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              See how it works
             </h2>
-            <p className="mt-4 text-lg text-slate-600">
-              Five simple steps to move work forward exactly the way you would - without touching your inbox.
+            <p className="mt-6 text-xl text-slate-600">
+              Watch Workmi chase down an unpaid invoice - from first ping to payment received.
             </p>
           </div>
 
-          <div className="mt-16 space-y-14">
+          {/* Bento Grid Layout */}
+          <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-12">
             {workflowSteps.map((step, index) => {
-              const isWide = step.mediaVariant === "wide";
-              const reverse = !isWide && index % 2 === 1;
-              const mediaSize = step.mediaSize ?? "md";
-              const phoneWidth = step.phoneWidth ?? 260;
-              const mediaWrapperClasses = (() => {
-                if (isWide) {
-                  return "w-full";
-                }
-                if (mediaSize === "lg") {
-                  return "md:w-[45%] lg:w-[42%]";
-                }
-                if (mediaSize === "md") {
-                  return "md:w-[38%] lg:w-[36%]";
-                }
-                if (mediaSize === "sm") {
-                  return "md:w-[30%] lg:w-[28%]";
-                }
-                if (mediaSize === "xs") {
-                  return "md:w-[48%] lg:w-[44%]";
-                }
-                return "md:w-[38%] lg:w-[36%]";
-              })();
-              const mediaOuterClasses = (() => {
-                if (isWide) {
-                  if (mediaSize === "xs") {
-                    return "overflow-hidden rounded-[30px] max-w-[600px] mx-auto";
-                  }
-                  if (mediaSize === "sm") {
-                    return "overflow-hidden rounded-[30px] border border-slate-200/70 shadow-lg max-w-[720px] mx-auto";
-                  }
-                  if (mediaSize === "lg") {
-                    return "overflow-hidden rounded-[30px] border border-slate-200/70 shadow-lg max-w-[880px] mx-auto";
-                  }
-                  return "overflow-hidden rounded-[30px] border border-slate-200/70 shadow-lg max-w-[820px] mx-auto";
-                }
-                if (mediaSize === "lg") {
-                  return "overflow-hidden rounded-[32px] border border-slate-200/70 shadow-lg";
-                }
-                if (mediaSize === "sm") {
-                  return "overflow-hidden rounded-3xl border border-slate-200/70 shadow-lg";
-                }
-                return "overflow-hidden rounded-3xl border border-slate-200/70 shadow-lg";
-              })();
-              const mediaInnerWrapper = (() => {
-                if (isWide) return "";
-                if (mediaSize === "lg") return "mx-auto";
-                if (mediaSize === "sm") return "mx-auto max-w-[210px]";
-                if (mediaSize === "xs") return "mx-auto max-w-[420px]";
-                return "mx-auto max-w-[240px]";
-              })();
-              const phoneMaxWidthStyle = !isWide && mediaSize === "lg" ? { maxWidth: `${phoneWidth}px` } : undefined;
-              const containerLayout = isWide
-                ? ""
-                : reverse
-                  ? "md:flex-row md:flex-row-reverse"
-                  : "md:flex-row";
-              const textColumnClasses = isWide
-                ? "relative z-10 w-full md:mx-auto md:max-w-3xl"
-                : `relative z-10 flex-1 md:flex md:flex-col md:justify-center ${reverse ? "md:ml-6 md:text-right md:items-end" : "md:mr-6"}`;
+              // Bento grid layout based on actual image dimensions
+              // Step 1,2: vertical phones | Step 3: SQUARE needs width! | Step 4: wide dashboard | Step 5: vertical phone beside step 4
+              const bentoLayouts = {
+                "01": "lg:col-span-6",  // Vertical phone - half width
+                "02": "lg:col-span-6",  // Vertical phone - half width
+                "03": "lg:col-span-12", // Square laptop - FULL WIDTH so it's readable!
+                "04": "lg:col-span-8",  // Wide dashboard - 8 columns
+                "05": "lg:col-span-4"   // Vertical phone - 4 columns beside step 4
+              };
 
+              const isWideImage = step.step === "04"; // Step 4 has wide horizontal dashboard
+              const isSquare = step.step === "03";
               return (
                 <div
                   key={step.step}
-                  className={`scroll-animate relative flex flex-col overflow-hidden rounded-3xl border border-slate-200/70 bg-white ${step.step === "04" ? "p-8 shadow-xl sm:p-12" : "p-6 shadow-xl sm:p-8"} ${containerLayout}`}
+                  className={`glass scroll-animate group relative overflow-hidden rounded-3xl border border-white/60 p-8 shadow-2xl transition-all duration-300 hover:shadow-xl ${bentoLayouts[step.step as keyof typeof bentoLayouts]}`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="pointer-events-none absolute inset-0">
+                  {/* Gradient Background on Hover */}
+                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <div
-                      className={`absolute -top-24 h-64 w-64 rounded-full blur-3xl opacity-40 ${
-                        isWide ? "left-1/2 -translate-x-1/2" : ""
-                      }`}
+                      className="absolute inset-0 opacity-10"
                       style={{
                         background: `linear-gradient(135deg, ${step.accent.from}, ${step.accent.to})`,
-                        left: isWide ? undefined : reverse ? "auto" : "18%",
-                        right: isWide ? undefined : reverse ? "15%" : "auto",
                       }}
                     />
-                    <div
-                      className="absolute bottom-[-30%] left-1/2 h-72 w-72 -translate-x-1/2 rounded-full blur-[120px] opacity-30"
-                      style={{ background: step.accent.to }}
-                    />
                   </div>
 
-                  <div className={textColumnClasses}>
-                    <span className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-5 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 sm:text-sm">
-                      <span
-                        className="size-2.5 rounded-full"
-                        style={{ backgroundImage: `linear-gradient(90deg, ${step.accent.from}, ${step.accent.to})` }}
-                      />
-                      Step {step.step}
-                    </span>
-                    <h3 className="mt-4 font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
-                      {step.title}
-                    </h3>
-                    <p className="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
-                      {step.description}
-                    </p>
-                    {step.bullets && (
-                      <ul className={`mt-4 space-y-2.5 text-base text-slate-600 sm:text-lg ${reverse ? "md:ml-auto" : ""}`}>
-                        {step.bullets.map((bullet) => (
-                          <li
-                            key={bullet}
-                            className={`flex items-start gap-3 leading-relaxed ${reverse ? "flex-row-reverse text-right" : ""}`}
-                          >
-                            <span
-                              className="mt-1.5 size-2.5 min-h-2.5 min-w-2.5 rounded-full"
-                              style={{
-                                backgroundImage: `linear-gradient(120deg, ${step.accent.from}, ${step.accent.to})`,
-                              }}
-                            />
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+                  {/* Content - Adaptive layout based on image type */}
+                  <div className={`relative z-10 flex h-full flex-col`}>
+                    <div className={`flex flex-col`}>
+                      <div className="mb-4">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
+                          <span
+                            className="size-2 rounded-full"
+                            style={{ backgroundImage: `linear-gradient(90deg, ${step.accent.from}, ${step.accent.to})` }}
+                          />
+                          {step.step}
+                        </span>
+                      </div>
 
-                  <div
-                    className={`relative z-10 mt-10 ${isWide ? "md:mt-12" : "md:mt-0"} ${
-                      isWide ? "w-full" : mediaWrapperClasses
-                    } ${
-                      reverse && !isWide ? "md:mr-auto" : !isWide ? "md:ml-auto" : ""
-                    }`}
-                  >
-                    <div
-                      className={`${mediaOuterClasses} ${mediaInnerWrapper}`}
-                      style={phoneMaxWidthStyle}
-                    >
-                      <img src={step.media} alt={step.mediaAlt} className="h-auto w-full" />
+                      <h3 className={`font-display font-semibold tracking-tight text-slate-900 ${isSquare || isWideImage ? 'text-2xl lg:text-3xl' : 'text-xl lg:text-2xl'}`}>
+                        {step.title}
+                      </h3>
+
+                      <p className={`leading-relaxed text-slate-600 ${isSquare || isWideImage ? 'mt-3 text-base lg:text-lg' : 'mt-2 text-sm lg:text-base'}`}>
+                        {step.description}
+                      </p>
+                    </div>
+
+                    {/* Media */}
+                    <div className={`mt-auto pt-6 flex items-center justify-center`}>
+                      <div className={`overflow-hidden rounded-2xl ${isWideImage ? 'w-full border border-slate-200/50' : isSquare ? 'w-full max-w-[600px] border border-slate-200/50' : 'max-w-full'}`}>
+                        <img
+                          src={step.media}
+                          alt={step.mediaAlt}
+                          className="h-auto w-full transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -458,11 +450,34 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Integrations Section */}
+        <section className="mx-auto mt-28 max-w-7xl px-6 sm:px-8">
+          <div className="glass scroll-animate overflow-hidden rounded-3xl border border-white/60 p-12 shadow-2xl sm:p-16">
+            <div className="text-center">
+              <h2 className="font-display text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                Plugs into everything you use
+              </h2>
+              <p className="mt-4 text-lg text-slate-600 lg:text-xl">
+                Connect once. Full context everywhere.
+              </p>
+            </div>
+
+            {/* Integrations Image */}
+            <div className="mt-12 flex items-center justify-center">
+              <img
+                src="/assets/integrations.svg"
+                alt="Workmi integrates with Slack, Google, Calendar, QuickBooks, Stripe, and iMessage"
+                className="h-auto w-full max-w-2xl transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+          </div>
+        </section>
+
         <section
           id="waitlist"
           className="mx-auto mt-28 max-w-7xl px-6 sm:px-8"
         >
-          <div className="scroll-animate overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-xl sm:px-12">
+          <div className="glass scroll-animate overflow-hidden rounded-3xl border border-white/60 px-6 py-16 text-center shadow-2xl sm:px-12">
           <div className="mx-auto max-w-3xl">
             <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-[40px]">
               Ready to get your Workmi?
@@ -479,9 +494,10 @@ export default function Home() {
               />
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-7 py-3 text-base font-semibold text-white shadow-sm transition hover:shadow-md sm:w-auto"
+                className="magnetic-btn group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-7 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:w-auto"
               >
                 Join waitlist
+                <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
               </button>
             </form>
             <p className="mt-4 text-sm text-slate-500">
@@ -491,6 +507,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      </div>
     </div>
   );
 }
