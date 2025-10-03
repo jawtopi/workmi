@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { Route } from "./+types/home";
 
 type WorkflowStep = {
@@ -18,7 +19,7 @@ type WorkflowStep = {
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Your Workmi" },
+    { title: "Your workmi" },
     {
       name: "description",
       content:
@@ -30,44 +31,41 @@ export function meta({}: Route.MetaArgs) {
 const workflowSteps: WorkflowStep[] = [
   {
     step: "01",
-    title: "AI clone checks in",
+    title: "Your Workmi checks in",
     description:
-      "Workmi watches your inbox, calendar, CRM, and billing trails so you hear about what matters before it slips.",
+      "Your Workmi proactively spots John's unpaid invoice and pings you before it slips.",
     bullets: [
-      "Texts or emails when a deal, invoice, or task needs your voice",
-      "Pulls live context from Gmail threads, notes, and meeting history",
+      "Because it's tied into your inbox and payment system, it knows exactly when to give you the heads-up.",
     ],
     media: "/assets/step1.svg",
     mediaAlt: "Mobile notification from Workmi about an unpaid invoice",
     mediaVariant: "phone",
     mediaSize: "lg",
-    phoneWidth: 332,
+    phoneWidth: 290,
     accent: { from: "#3A3EBE", to: "#F044A0" },
   },
   {
     step: "02",
-    title: "You green-light the move",
+    title: "You give the nod",
     description:
-      "Review the plan in seconds. Accept, tweak, or redirect Workmi with a tap. No new app or workflow to learn.",
+      "You reply yes and hand it off.",
     bullets: [
-      "Answers in iMessage, email, or Slack without breaking your flow",
-      "Suggests smart options so you stay in control of tone and timing",
+      "Text it like a teammate and Workmi understands exactly what you need.",
     ],
     media: "/assets/step2.svg",
     mediaAlt: "Approval interface showing Workmi play options",
     mediaVariant: "phone",
     mediaSize: "lg",
-    phoneWidth: 332,
+    phoneWidth: 290,
     accent: { from: "#F044A0", to: "#DC765C" },
   },
   {
     step: "03",
-    title: "Drafts with your voice",
+    title: "Workmi follows up",
     description:
-      "Workmi composes replies, follow-ups, and summaries that sound like you and reflect the latest customer intel.",
+      "It drafts the reminder in your voice, sends it on your behalf, and includes the payment link for John.",
     bullets: [
-      "References prior threads, docs, and meeting notes automatically",
-      "Highlights anything it needs from you before sending",
+      "Handles the tone, attachments, and payment link without another handoff.",
     ],
     media: "/assets/step3.svg",
     mediaAlt: "Laptop screen showing a Workmi drafted response",
@@ -77,12 +75,11 @@ const workflowSteps: WorkflowStep[] = [
   },
   {
     step: "04",
-    title: "Executes the workflow",
+    title: "Workmi handles the thread",
     description:
-      "Once approved, Workmi sends the message, updates the CRM, pings finance, and schedules the next touchpoint. All hands-off.",
+      "It manages the back-and-forth until the invoice is closed.",
     bullets: [
-      "Threads in Salesforce, HubSpot, or Notion stay perfectly in sync",
-      "Automations stop the moment you need to step back in",
+      "Loops you back in only if something needs your decision.",
     ],
     media: "/assets/step4.png",
     mediaAlt: "Dashboard view of Workmi coordinating multiple tools",
@@ -92,55 +89,77 @@ const workflowSteps: WorkflowStep[] = [
   },
   {
     step: "05",
-    title: "Sends the receipt",
+    title: "Workmi closes the loop",
     description:
-      "You get a crisp summary with next steps and the outcome - whether the invoice was paid or the meeting booked.",
+      "As soon as payment clears, Workmi sends you a receipt and files the outcome.",
     bullets: [
-      "Summaries arrive in your inbox or preferred channel instantly",
-      "Keeps a searchable record so nothing ever falls through",
+      "Simple text: payment received, invoice closed, you're done.",
     ],
     media: "/assets/step5.svg",
     mediaAlt: "Confirmation notification from Workmi that payment was received",
     mediaVariant: "phone",
     mediaSize: "lg",
-    phoneWidth: 332,
+    phoneWidth: 290,
     accent: { from: "#834561", to: "#3A3EBE" },
   },
 ];
 
 export default function Home() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll(".scroll-animate").forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3A3EBE] via-[#F044A0] to-[#DC765C] text-white">
-              <span className="font-display text-lg">W</span>
+      <header className="sticky top-4 z-50">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8">
+          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
+            <div className="flex items-center justify-between px-6 py-3 sm:px-8">
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3A3EBE] via-[#F044A0] to-[#DC765C] text-white">
+                <span className="font-display text-lg">W</span>
+              </div>
+              <span className="font-display text-2xl tracking-tight text-slate-900">workmi</span>
             </div>
-            <span className="font-display text-2xl tracking-tight text-slate-900">workmi</span>
+            <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
+              <a className="transition-colors hover:text-slate-900" href="#hero">
+                Product
+              </a>
+              <a className="transition-colors hover:text-slate-900" href="#how-it-works">
+                How it works
+              </a>
+            </nav>
+            <a
+              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:shadow-md"
+              href="#waitlist"
+            >
+              Join waitlist
+              <span aria-hidden className="text-base">→</span>
+            </a>
           </div>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-            <a className="transition-colors hover:text-slate-900" href="#hero">
-              Product
-            </a>
-            <a className="transition-colors hover:text-slate-900" href="#how-it-works">
-              How it works
-            </a>
-          </nav>
-          <a
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:shadow-md"
-            href="#waitlist"
-          >
-            Join waitlist
-            <span aria-hidden className="text-base">→</span>
-          </a>
+        </div>
         </div>
       </header>
 
       <main className="pb-24">
         {/* Hero Section */}
         <section id="hero" className="mx-auto mt-8 max-w-7xl px-6 sm:px-8">
-          <div className="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-8 shadow-sm backdrop-blur-sm sm:p-12">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white p-8 shadow-xl sm:p-12">
             {/* Subtle background gradient */}
             <div className="pointer-events-none absolute inset-0">
               <div
@@ -159,14 +178,14 @@ export default function Home() {
               <div className="flex flex-col items-start">
                 <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">
                   Meet Your{" "}
-                  <span className="bg-[linear-gradient(90deg,#3A3EBE_0%,#F044A0_50%,#DC765C_100%)] bg-clip-text text-transparent">
-                    Workmi
+                  <span className="animate-gradient-text bg-[linear-gradient(90deg,#3A3EBE_0%,#F044A0_50%,#DC765C_100%)] bg-clip-text text-transparent">
+                    workmi
                   </span>
                 </h1>
 
                 <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-                  Your personal AI work clone that writes emails, schedules meetings, and organizes workflows -{" "}
-                  <span className="font-semibold text-slate-900">exactly like you do.</span>
+                  Your fully autonomous AI work clone that anticipates, communicates, and executes across every workflow -{" "}
+                  <span className="font-semibold text-slate-900">while you stay focused on the next move.</span>
                 </p>
 
                 <div className="mt-8 flex items-center gap-4">
@@ -291,8 +310,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="how-it-works" className="mx-auto mt-28 max-w-7xl px-6 sm:px-8 lg:px-12">
-          <div className="text-center">
+        <section id="how-it-works" className="mx-auto mt-28 max-w-7xl px-6 sm:px-8">
+          <div className="scroll-animate text-center">
             <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
               See how Workmi runs a play
             </h2>
@@ -312,15 +331,18 @@ export default function Home() {
                   return "w-full";
                 }
                 if (mediaSize === "lg") {
-                  return "md:w-[32%] lg:w-[28%]";
+                  return "md:w-[45%] lg:w-[42%]";
+                }
+                if (mediaSize === "md") {
+                  return "md:w-[38%] lg:w-[36%]";
                 }
                 if (mediaSize === "sm") {
-                  return "md:w-[26%] lg:w-[22%]";
+                  return "md:w-[30%] lg:w-[28%]";
                 }
                 if (mediaSize === "xs") {
                   return "md:w-[48%] lg:w-[44%]";
                 }
-                return "md:w-[32%] lg:w-[26%]";
+                return "md:w-[38%] lg:w-[36%]";
               })();
               const mediaOuterClasses = (() => {
                 if (isWide) {
@@ -358,12 +380,12 @@ export default function Home() {
                   : "md:flex-row";
               const textColumnClasses = isWide
                 ? "relative z-10 w-full md:mx-auto md:max-w-3xl"
-                : `relative z-10 flex-1 md:flex md:flex-col md:justify-center ${reverse ? "md:ml-12 md:text-right md:items-end" : "md:mr-12"}`;
+                : `relative z-10 flex-1 md:flex md:flex-col md:justify-center ${reverse ? "md:ml-6 md:text-right md:items-end" : "md:mr-6"}`;
 
               return (
                 <div
                   key={step.step}
-                  className={`relative flex flex-col overflow-hidden rounded-[32px] border border-white/70 bg-white/90 p-8 shadow-[0_35px_100px_-60px_rgba(58,62,190,0.55)] backdrop-blur-sm sm:p-12 ${containerLayout}`}
+                  className={`scroll-animate relative flex flex-col overflow-hidden rounded-3xl border border-slate-200/70 bg-white ${step.step === "04" ? "p-8 shadow-xl sm:p-12" : "p-6 shadow-xl sm:p-8"} ${containerLayout}`}
                 >
                   <div className="pointer-events-none absolute inset-0">
                     <div
@@ -383,28 +405,28 @@ export default function Home() {
                   </div>
 
                   <div className={textColumnClasses}>
-                    <span className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    <span className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-5 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 sm:text-sm">
                       <span
-                        className="size-2 rounded-full"
+                        className="size-2.5 rounded-full"
                         style={{ backgroundImage: `linear-gradient(90deg, ${step.accent.from}, ${step.accent.to})` }}
                       />
                       Step {step.step}
                     </span>
-                    <h3 className="mt-5 font-display text-4xl tracking-tight text-slate-900 sm:text-5xl">
+                    <h3 className="mt-4 font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
                       {step.title}
                     </h3>
-                    <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+                    <p className="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
                       {step.description}
                     </p>
                     {step.bullets && (
-                      <ul className={`mt-6 space-y-3 text-sm text-slate-600 ${reverse ? "md:ml-auto md:max-w-md" : "md:max-w-md"}`}>
+                      <ul className={`mt-4 space-y-2.5 text-base text-slate-600 sm:text-lg ${reverse ? "md:ml-auto" : ""}`}>
                         {step.bullets.map((bullet) => (
                           <li
                             key={bullet}
                             className={`flex items-start gap-3 leading-relaxed ${reverse ? "flex-row-reverse text-right" : ""}`}
                           >
                             <span
-                              className="mt-1 size-2.5 min-h-2.5 min-w-2.5 rounded-full"
+                              className="mt-1.5 size-2.5 min-h-2.5 min-w-2.5 rounded-full"
                               style={{
                                 backgroundImage: `linear-gradient(120deg, ${step.accent.from}, ${step.accent.to})`,
                               }}
@@ -438,8 +460,9 @@ export default function Home() {
 
         <section
           id="waitlist"
-          className="mx-auto mt-28 max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center shadow-lg sm:px-12"
+          className="mx-auto mt-28 max-w-7xl px-6 sm:px-8"
         >
+          <div className="scroll-animate overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-xl sm:px-12">
           <div className="mx-auto max-w-3xl">
             <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-[40px]">
               Ready to get your Workmi?
@@ -464,6 +487,7 @@ export default function Home() {
             <p className="mt-4 text-sm text-slate-500">
               <span className="font-medium text-slate-600">3,284</span> operators already in line.
             </p>
+          </div>
           </div>
         </section>
       </main>
