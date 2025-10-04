@@ -251,5 +251,18 @@
 
   .magnetic-btn {
     transition: transform 0.2s ease-out;
+    /* Fix for iOS Safari gradient rendering issues */
+    -webkit-text-fill-color: white;
+    color: white;
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Ensure gradients render on iOS Safari */
+  .bg-gradient-to-r,
+  .bg-gradient-to-br,
+  [class*="bg-gradient"] {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 }
