@@ -209,6 +209,12 @@
     -webkit-backdrop-filter: blur(10px);
   }
 
+  /* Fix for iOS Safari gradient button text */
+  .magnetic-btn {
+    -webkit-text-fill-color: white;
+    -webkit-background-clip: padding-box;
+  }
+
   .hover-lift {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }

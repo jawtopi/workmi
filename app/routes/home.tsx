@@ -318,11 +318,11 @@ export default function Home() {
 
               {/* Right: Demo Cards */}
               <div className="relative lg:pl-4">
-                <div className="relative h-[480px] w-full">
+                <div className="relative h-[480px] w-full overflow-hidden md:overflow-visible">
 
                 {/* Card 1: Text Communication - Large Left Card */}
                 <div
-                  className="glass hover-lift animate-card-entrance absolute left-0 top-1/2 w-[320px] -translate-y-1/2 rounded-2xl border border-white/60 p-6 shadow-xl"
+                  className="glass hover-lift animate-card-entrance absolute left-0 top-1/2 w-[280px] sm:w-[320px] -translate-y-1/2 rounded-2xl border border-white/60 p-4 sm:p-6 shadow-xl"
                   style={{ zIndex: 1, animationDelay: '0.1s' }}
                 >
                   <div className="relative">
@@ -365,7 +365,7 @@ export default function Home() {
 
                 {/* Card 2: Calendar Orchestration - Top Right */}
                 <div
-                  className="glass hover-lift animate-card-entrance absolute left-[200px] top-6 w-[280px] rounded-2xl border border-white/60 p-5 shadow-xl"
+                  className="glass hover-lift animate-card-entrance absolute left-[160px] sm:left-[200px] top-6 w-[200px] sm:w-[240px] md:w-[280px] rounded-2xl border border-white/60 p-3 sm:p-4 md:p-5 shadow-xl"
                   style={{ zIndex: 2, animationDelay: '0.3s' }}
                 >
                   <div className="relative">
@@ -399,7 +399,7 @@ export default function Home() {
 
                 {/* Card 3: Proactive Actions - Bottom Right */}
                 <div
-                  className="glass hover-lift animate-card-entrance absolute bottom-6 left-[220px] w-[290px] rounded-2xl border border-white/60 p-5 shadow-xl"
+                  className="glass hover-lift animate-card-entrance absolute bottom-6 left-[160px] sm:left-[200px] md:left-[220px] w-[200px] sm:w-[240px] md:w-[290px] rounded-2xl border border-white/60 p-3 sm:p-4 md:p-5 shadow-xl"
                   style={{ zIndex: 2, animationDelay: '0.5s' }}
                 >
                   <div className="relative">
