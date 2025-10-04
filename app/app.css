@@ -205,14 +205,14 @@
 
   .glass {
     background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
   }
 
-  /* Fix for iOS Safari gradient button text */
-  .magnetic-btn {
-    -webkit-text-fill-color: white;
-    -webkit-background-clip: padding-box;
+  /* Only apply backdrop-filter on desktop - it breaks gradients on iPhone */
+  @media (min-width: 768px) {
+    .glass {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
   }
 
   .hover-lift {
