@@ -240,7 +240,10 @@ export default function Home() {
           <div className="glass overflow-hidden rounded-3xl border border-white/60 shadow-2xl">
             <div className="flex items-center justify-between px-6 py-3 sm:px-8">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3A3EBE] via-[#F044A0] to-[#DC765C] text-white">
+              <div
+                className="flex size-10 items-center justify-center rounded-2xl text-white"
+                style={{ background: 'linear-gradient(to bottom right, #3A3EBE, #F044A0, #DC765C)' }}
+              >
                 <span className="font-display text-lg">W</span>
               </div>
               <span className="font-display text-2xl tracking-tight text-slate-900">workmi</span>
@@ -254,7 +257,8 @@ export default function Home() {
               </a>
             </nav>
             <a
-              className="magnetic-btn group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+              className="magnetic-btn group inline-flex items-center gap-2 rounded-lg px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+              style={{ background: 'linear-gradient(to right, #3A3EBE, #F044A0)' }}
               href="#waitlist"
             >
               Join waitlist
@@ -299,7 +303,8 @@ export default function Home() {
 
                 <div className="mt-8 flex items-center gap-4">
                   <a
-                    className="magnetic-btn group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                    className="magnetic-btn group inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                    style={{ background: 'linear-gradient(to right, #3A3EBE, #F044A0)' }}
                     href="https://tally.so/r/n0N6zB"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -561,7 +566,8 @@ export default function Home() {
                 href="https://tally.so/r/n0N6zB"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="magnetic-btn group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#3A3EBE] to-[#F044A0] px-7 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                className="magnetic-btn group inline-flex items-center justify-center gap-2 rounded-lg px-7 py-3 text-base font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                style={{ background: 'linear-gradient(to right, #3A3EBE, #F044A0)' }}
               >
                 Join waitlist
                 <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
