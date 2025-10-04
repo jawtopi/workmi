@@ -543,7 +543,7 @@ export default function Home() {
               <img
                 src="/assets/integrations.svg"
                 alt="Workmi integrates with Slack, Google, Calendar, QuickBooks, Stripe, and iMessage"
-                className="h-auto w-full max-w-2xl transition-transform duration-300 hover:scale-105"
+                className="h-auto w-full max-w-lg md:max-w-2xl transition-transform duration-300 hover:scale-105"
               />
             </div>
           </div>
